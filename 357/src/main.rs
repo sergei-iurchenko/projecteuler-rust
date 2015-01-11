@@ -10,7 +10,7 @@ use std::collections::HashSet;
 use std::iter;
 
 fn get_primes_below(n: uint) -> Vec<uint> {
-    let mut sieve = bitv::Bitv::with_capacity(n, true);
+    let mut sieve = bitv::Bitv::from_elem(n, true);
     let stop = sieve.len();
     for i in iter::range_step(3, (n as f64).sqrt() as uint + 1u, 2) {
         if sieve[i] == true {
