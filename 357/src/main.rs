@@ -1,18 +1,15 @@
 extern crate time;
-extern crate test;
 
-use std::mem::size_of;
-use std::num::{Float, Int};
-use test::Bencher;
+use std::num::{Float};
 use time::precise_time_s;
 use std::collections::bitv;
 use std::collections::HashSet;
 use std::iter;
 
-fn get_primes_below(n: uint) -> Vec<uint> {
+fn get_primes_below(n: usize) -> Vec<usize> {
     let mut sieve = bitv::Bitv::from_elem(n, true);
     let stop = sieve.len();
-    for i in iter::range_step(3, (n as f64).sqrt() as uint + 1u, 2) {
+    for i in iter::range_step(3, (n as f64).sqrt() as usize + 1us, 2) {
         if sieve[i] == true {
             for j in iter::range_step(i * i, stop, 2 * i) {
                 sieve.set(j, false);
@@ -20,7 +17,7 @@ fn get_primes_below(n: uint) -> Vec<uint> {
         }
     }
 
-    let mut result:Vec<uint> = Vec::with_capacity(n);
+    let mut result:Vec<usize> = Vec::with_capacity(n);
     result.push(2);
     for i in iter::range_step(3, n, 2) {
         if sieve[i] == true {
@@ -30,8 +27,8 @@ fn get_primes_below(n: uint) -> Vec<uint> {
     result
 }
 
-fn check(n: uint, primes: &HashSet<uint>) -> bool {
-    if ![0u, 2, 8].contains(&(n % 10))
+fn check(n: usize, primes: &HashSet<usize>) -> bool {
+    if ![0us, 2, 8].contains(&(n % 10))
     {
         return false;
     }
@@ -39,7 +36,7 @@ fn check(n: uint, primes: &HashSet<uint>) -> bool {
     {
         return false;
     }
-    for d in range(3, (n as f64).sqrt() as uint) {
+    for d in 3..((n as f64).sqrt() as usize) {
         if (n % d) == 0
         {
             if !primes.contains(&(d + n / d)) {
@@ -53,14 +50,14 @@ fn check(n: uint, primes: &HashSet<uint>) -> bool {
 
 fn main() {
     let start_time = precise_time_s();
-    let a: uint = 10u.pow(8);
+    let a = 100000000us;
     let primes_vec = get_primes_below(a);
     println!("{} sec.", precise_time_s() - start_time);
-    let primes: HashSet<uint> = primes_vec.iter().map(|&x| x).collect();
+    let primes: HashSet<usize> = primes_vec.iter().map(|&x| x).collect();
     println!("{} sec.", precise_time_s() - start_time);
-    let mut sum: uint = 7;
+    let mut sum = 7us;
     for x in primes.iter() {
-        let _x = *x - 1u;
+        let _x = *x - 1us;
         if check(_x, &primes) == true {
             sum += _x;
         }
@@ -70,7 +67,3 @@ fn main() {
     println!("answer = {}", sum);
 }
 
-#[bench]
-fn main_test(b: &mut Bencher) {
-    b.iter(main);
-}
