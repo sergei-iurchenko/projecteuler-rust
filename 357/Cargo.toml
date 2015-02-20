@@ -6,3 +6,15 @@ authors = ["Urchenko <urchenko88@gmail.com>"]
 
 [dependencies]
 time = "*"
+
+[profile.release]
+opt-level = 3 
+debug = false
+rpath = false
+lto = false
+
+[profile.test]
+opt-level = 3
+debug = true
+rpath = false
+lto = false
