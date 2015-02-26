@@ -1,9 +1,11 @@
 extern crate time;
+extern crate test;
 
 use std::num::{Float};
 use time::precise_time_s;
 use std::collections::{BitVec, BitSet};
 use std::iter;
+use test::Bencher;
 
 fn get_primes_below(n: usize)-> BitSet {
     let mut sieve = BitVec::from_elem(n, true);
@@ -22,7 +24,6 @@ fn get_primes_below(n: usize)-> BitSet {
             result.insert(i);
         };
     }
-    println!("{}", result.len());
     *result
 }
 
@@ -49,7 +50,7 @@ fn check(n: usize, primes: &BitSet) -> bool {
 fn find(n: usize) -> usize {
     let start_time = precise_time_s();
     let primes = Box::new(get_primes_below(n));
-    println!("{} sec.", precise_time_s() - start_time);
+    //println!("{} sec.", precise_time_s() - start_time);
     let mut sum = 7usize;
     for x in primes.iter() {
         let _x = x - 1;
@@ -58,14 +59,14 @@ fn find(n: usize) -> usize {
         }
     }
 
-    println!("{} sec.", precise_time_s() - start_time);
-    println!("answer = {}", sum);
+    //println!("{} sec.", precise_time_s() - start_time);
     sum
 }
 
 fn main() {
     let n = 1000_000_00usize;
-    find(n);
+    let result = find(n);
+    println!("answer = {}", result);
 }
 
 #[test]
@@ -74,3 +75,7 @@ fn it_works() {
     assert!(find(n) == 1739023853137usize);
 }
 
+#[bench]
+fn bench_it(b: &mut Bencher) {
+    b.iter(|| find(1000));
+}
