@@ -9,7 +9,7 @@ fn is_square_number(number: isize) -> bool {
 fn get_y(y: f32) -> isize {
     if y == Float::zero() {return 0}
     let _y = y.abs();
-    let y_floor = _y.floor();
+    let y_floor = _y.trunc();
     if _y - y_floor == Float::zero() {
         y_floor as isize - 1
     }
@@ -42,6 +42,8 @@ fn calc_sum(a: isize, b: isize, c: isize, d: isize) -> isize {
 }
 
 fn cycle_simple(n: isize) -> isize {
+    let powers = (1..(2 * n + 1)).map(|x| x*x).collect::<Vec<isize>>();
+    println!("{}", powers.contains(*(25isize)));
     let m = n + 1;
     let mut quantity = 0isize;
     for a in 1..m {
@@ -61,7 +63,7 @@ fn cycle_simple(n: isize) -> isize {
 }
 
 fn main() {
-    let m = 100;
+    let m = 31;
     let result = cycle_simple(m);
     println!("Итого при m={}: {}", m, result);
 }
