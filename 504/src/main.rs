@@ -2,17 +2,19 @@ use std::num::{SignedInt, Float};
 
 fn is_square_number(number: isize) -> bool {
     let number_precise = (number as f32).sqrt();
-    let number_rounded = number_precise.round();
+    let number_rounded = number_precise.trunc();
     if number_precise - number_rounded == Float::zero() {true} else {false}
 }
 
 fn get_y(y: f32) -> isize {
-    let y_floor = y.floor();
-    if y - y_floor == Float::zero() {
-        (y_floor as isize).abs() - 1
+    if y == Float::zero() {return 0}
+    let _y = y.abs();
+    let y_floor = _y.floor();
+    if _y - y_floor == Float::zero() {
+        y_floor as isize - 1
     }
     else {
-      (y as isize).abs()
+      _y as isize
     }
 }
 
@@ -36,7 +38,6 @@ fn calc_sum(a: isize, b: isize, c: isize, d: isize) -> isize {
         let y = ((d as f32) / (a as f32) * (x as f32)) - (d as f32);
         sum += get_y(y);        
     }
-
     sum
 }
 
@@ -60,17 +61,19 @@ fn cycle_simple(n: isize) -> isize {
 }
 
 fn main() {
-    let m = 4;
-    //for i in 1..200 {
-    //    println!("{} - {}", i, is_square_number(i));    
-    //}
+    let m = 100;
     let result = cycle_simple(m);
     println!("Итого при m={}: {}", m, result);
 }
 
 #[test]
 fn test_get_y() {
-    println!("{}", get_y(5f32));
     assert!(get_y(5f32) == 4isize);
     assert!(get_y(5.1f32) == 5isize);
+    assert!(get_y(-5.1f32) == 5isize);
+    assert!(get_y(-1.1f32) == 1isize);
+    assert!(get_y(-0.9f32) == 0isize);
+    assert!(get_y(0.9f32) == 0isize);
+    assert!(get_y(0.0f32) == 0isize);
+    assert!(get_y(1.0f32) == 0isize);
 }
