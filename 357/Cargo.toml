@@ -1,8 +1,8 @@
 [package]
 
-name = "357"
+name = "problem"
 version = "0.0.1"
-authors = ["Urchenko <urchenko88@gmail.com>"]
+authors = ["Hellpain"]
 
 [dependencies]
 time = "*"

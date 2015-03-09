@@ -59,7 +59,7 @@ fn find(n: usize) -> usize {
         }
     }
 
-    //println!("{} sec.", precise_time_s() - start_time);
+    println!("{} sec.", precise_time_s() - start_time);
     sum
 }
 
