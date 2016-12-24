@@ -1,15 +1,8 @@
 [package]
 
-name = "problem"
+name = "problem_357"
 version = "0.0.1"
 authors = ["Hellpain"]
 
 [dependencies]
 time = "*"
-
-[profile.test]
-opt-level = 3
-
-[profile.dev]
-opt-level = 3  
-

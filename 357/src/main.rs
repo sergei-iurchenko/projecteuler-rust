@@ -1,25 +1,25 @@
 extern crate time;
-extern crate test;
 
-use std::num::{Float};
 use time::precise_time_s;
-use std::collections::{BitVec, BitSet};
-use std::iter;
-use test::Bencher;
+use std::collections::BTreeSet;
 
-fn get_primes_below(n: usize)-> BitSet {
-    let mut sieve = BitVec::from_elem(n, true);
+fn get_primes_below(max_digit: usize)-> BTreeSet<usize> {
+    let mut sieve: Vec<bool> = Vec::with_capacity(max_digit);
+    for _ in 0..max_digit {
+        sieve.push(true);
+    }
     let stop = sieve.len();
-    for i in iter::range_step(3, (n as f64).sqrt() as usize + 1, 2) {
+    let top = (max_digit as f64).sqrt() as usize + 1;
+    for (_, i) in (3..top).enumerate().filter(|&(index, _)| index % 2 == 0) {
         if sieve[i] == true {
-            for j in iter::range_step(i * i, stop, 2 * i) {
-                sieve.set(j, false);
+            for (_, j) in (i*i..stop).enumerate().filter(|&(index, _)| index % (2 * i) == 0 ) {
+                sieve[j] = false;
             }
         }
     }
-    let mut result = Box::new(BitSet::with_capacity(n/15));
+    let mut result = Box::new(BTreeSet::new());
     result.insert(2);
-    for i in iter::range_step(3, n, 2) {
+    for (_, i) in (3..max_digit).enumerate().filter(|&(index, _)| index % 2 == 0) {
         if sieve[i] == true {
             result.insert(i);
         };
@@ -27,7 +27,7 @@ fn get_primes_below(n: usize)-> BitSet {
     *result
 }
 
-fn check(n: usize, primes: &BitSet) -> bool {
+fn check(n: usize, primes: &BTreeSet<usize>) -> bool {
     if ![0usize, 2, 8].contains(&(n % 10))
     {
         return false;
@@ -50,7 +50,7 @@ fn check(n: usize, primes: &BitSet) -> bool {
 fn find(n: usize) -> usize {
     let start_time = precise_time_s();
     let primes = Box::new(get_primes_below(n));
-    //println!("{} sec.", precise_time_s() - start_time);
+    println!("{} sec.", precise_time_s() - start_time);
     let mut sum = 7usize;
     for x in primes.iter() {
         let _x = x - 1;
@@ -67,6 +67,9 @@ fn main() {
     let n = 1000_000_00usize;
     let result = find(n);
     println!("answer = {}", result);
+//    for (index, value) in (3..20).enumerate().filter(|&(index, _)| index % 2 == 0) {
+//        println!("{}", value)
+//    }
 }
 
 #[test]
@@ -75,7 +78,7 @@ fn it_works() {
     assert!(find(n) == 1739023853137usize);
 }
 
-#[bench]
-fn bench_it(b: &mut Bencher) {
-    b.iter(|| find(1000));
-}
+//#[bench]
+//fn bench_it(b: &mut Bencher) {
+//    b.iter(|| find(1000));
+//}
