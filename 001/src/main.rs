@@ -1,5 +1,3 @@
-use std::iter::AdditiveIterator;
-
 fn find()-> usize {
     let below = 1000usize;
     let mut all_multiple: Vec<usize> = Vec::new();

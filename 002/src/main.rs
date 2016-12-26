@@ -1,5 +1,3 @@
-use std::iter::AdditiveIterator;
-
 fn find() -> usize {
     let limit = 4_000_000usize;
     let mut fibonachi: Vec<usize> = Vec::new();

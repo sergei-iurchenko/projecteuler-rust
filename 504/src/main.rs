@@ -1,8 +1,7 @@
 extern crate time;
 
-use std::collections::BitSet;
-
 use time::precise_time_s;
+use std::collections::BTreeSet;
 
 fn gcd(a: usize, b: usize) -> usize {
         if b == 0usize {
@@ -41,7 +40,7 @@ fn calc_sum(a: usize, b: usize, c: usize, d: usize) -> usize {
 }
 
 fn cycle_simple(n: usize) -> usize {
-    let mut powers = BitSet::new();
+    let mut powers = BTreeSet::new();
     for i in 1..2*n+1 {
         powers.insert((i*i) as usize);
     }
