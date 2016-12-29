@@ -1,3 +1,5 @@
+#![feature(step_by)]
+
 extern crate time;
 extern crate bit_vec;
 
@@ -10,16 +12,16 @@ fn get_primes_below(max_digit: usize)-> BTreeSet<usize> {
     let mut sieve = BitVec::from_elem(max_digit, true);
     let stop = sieve.len();
     let top = (max_digit as f64).sqrt() as usize + 1;
-    for (_, i) in (3..top).enumerate().filter(|&(index, _)| index % 2 == 0) {
+    for i in (3..top).step_by(2) {
         if sieve[i] == true {
-            for (_, j) in ((i*i)..stop).enumerate().filter(|&(index, _)| index % (2 * i) == 0 ) {
+            for j in (i*i..stop).step_by(2*i) {
                 sieve.set(j, false);
             }
         }
     }
     let mut result = Box::new(BTreeSet::new());
     result.insert(2);
-    for (_, i) in (3..max_digit).enumerate().filter(|&(index, _)| index % 2 == 0) {
+    for i in (3..max_digit).step_by(2) {
         if sieve[i] == true {
             result.insert(i);
         };
@@ -36,7 +38,8 @@ fn check(n: usize, primes: &BTreeSet<usize>) -> bool {
     {
         return false;
     }
-    for d in 3..((n as f64).sqrt() as usize) {
+    let top = (n as f64).sqrt() as usize;
+    for d in 3..top {
         if (n % d) == 0
         {
             if !primes.contains(&(d + n / d)) {
@@ -50,7 +53,6 @@ fn check(n: usize, primes: &BTreeSet<usize>) -> bool {
 fn find(n: usize) -> usize {
     let start_time = precise_time_s();
     let primes = Box::new(get_primes_below(n));
-    println!("{} sec.", precise_time_s() - start_time);
     let mut sum = 7usize;
     for x in primes.iter() {
         let _x = x - 1;
@@ -64,7 +66,7 @@ fn find(n: usize) -> usize {
 }
 
 fn main() {
-    let n = 1000_000_00usize;
+    let n = 1000_000_00;
     let result = find(n);
     println!("answer = {}", result);
 }
@@ -73,5 +75,5 @@ fn main() {
 #[test]
 fn it_works() {
     let n = 1000_000_00usize;
-    assert!(find(n) == 1739023853137usize);
+    assert!(find(n) == 1739023853137);
 }
